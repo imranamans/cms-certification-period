@@ -1,16 +1,7 @@
 <template>
-  <section class="hero is-light">
-    <div class="hero-body">
-      <div class="container">
-        <h1 class="title">Home Health Certification Period Calculator</h1>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <div class="notification is-success is-light">{{ message }}</div>
-
+  <div class="notification is-info is-light">{{ message }}</div>
+  <div class="tile is-parent is-vertical">
+    <div class="tile is-child">
       <div id="certPeriodInputsForm">
         <div class="field is-horizontal">
           <div class="field-label is-normal">
@@ -115,15 +106,12 @@
         </div>
       </div>
     </div>
-    <!-- container -->
-  </section>
 
-  <section class="section">
-    <div class="container">
+    <div class="tile is-child">
       <ul class="is-family-monospace has-text-weight-bold block">
         <li v-for="n in defaultCertPeriodDisplayCount" :key="n">
-          Cert Period #{{ ("00" + n).slice(-2) }}
-          {{ getFormattedCertPeriod(getNextCertPeriod(socDate, n)) }}
+          Certification Period #{{ ("00" + n).slice(-2) }}
+          <span class="has-background-link-light">{{ getFormattedCertPeriod(getNextCertPeriod(socDate, n)) }}</span>
         </li>
         <li>
           <a
@@ -135,16 +123,7 @@
         </li>
       </ul>
     </div>
-  </section>
-
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <p>
-        Home Health Certification Period Calculator by Imran Shah. The source
-        code is licensed MIT.
-      </p>
-    </div>
-  </footer>
+  </div>
 </template>
 <script>
 import { DateTime } from "luxon";
@@ -175,25 +154,17 @@ export default {
       };
     },
     isCurrentCertPeriod(start, end) {
-      const today = DateTime.local();
+      const today = DateTime.local().startOf("day");
       return today <= end && today >= start;
     },
     getFormattedCertPeriod(certPeriod) {
       const { start, end, isCurrent } = certPeriod;
-      return `Start: ${start.toFormat("MM/dd/yyyy")} End: ${end.toFormat(
+      return `${start.toFormat("MM/dd/yyyy")} to ${end.toFormat(
         "MM/dd/yyyy"
-      )} ${isCurrent ? "< Current Cert Period" : ""}`;
+      )} ${isCurrent ? "< Current" : ""}`;
     },
     range,
     calculateSocDate() {
-      console.log("1", this.todayIsDay);
-      console.log("2", this.$data[this.todayIsDay]);
-      console.log(
-        "3",
-        DateTime.local()
-          .minus({ days: this.$data[this.todayIsDay] - 1 })
-          .toISODate()
-      );
       this.socDate = DateTime.local()
         .minus({ days: this.$data[this.todayIsDay] - 1 })
         .toISODate();
