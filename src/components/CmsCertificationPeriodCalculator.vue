@@ -16,6 +16,7 @@
                   class="input"
                   type="date"
                   placeholder="mm/dd/yyyy"
+                  @change="resetSelectByToday()"
                 />
               </div>
             </div>
@@ -23,7 +24,10 @@
               <div class="control">
                 <a
                   class="button is-text"
-                  @click="makeTodayAsSocDate"
+                  @click="
+                    makeTodayAsSocDate();
+                    resetSelectByToday();
+                  "
                   title="Set start of care to today"
                   >Today {{ today }}
                 </a>
@@ -35,16 +39,16 @@
         <div class="field is-horizontal">
           <div class="field-label is-normal"></div>
           <div class="field-body">
-            <p>Or</p>
+            <p> <strong>Or</strong></p>
           </div>
         </div>
 
         <div id="todayInFirst55Days" class="field is-horizontal">
-          <div class="field-label">
+          <div class="field-label is-normal">
             <label class="label">Today is in the</label>
           </div>
           <div class="field-body">
-            <div class="field is-narrow">
+            <div class="field is-horizontal is-grouped">
               <div class="control">
                 <label class="radio">
                   <input
@@ -59,10 +63,9 @@
                   pick a day
                 </label>
               </div>
-            </div>
-            <div class="field is-narrow">
+
               <div class="control">
-                <div class="select is-fullwidth">
+                <div class="select">
                   <select
                     id="dayInFirst55Days"
                     v-model.number="dayInFirst55Days"
@@ -81,7 +84,7 @@
         <div id="todayInLast5Days" class="field is-horizontal">
           <div class="field-label"></div>
           <div class="field-body">
-            <div class="field is-narrow">
+            <div class="field is-horizontal is-grouped">
               <div class="control">
                 <label class="radio">
                   <input
@@ -96,10 +99,9 @@
                   pick a day
                 </label>
               </div>
-            </div>
-            <div class="field is-narrow">
+
               <div class="control">
-                <div class="select is-fullwidth">
+                <div class="select">
                   <select
                     id="dayInLast5Days"
                     v-model.number="dayInLast5Days"
@@ -120,7 +122,12 @@
     </div>
 
     <div class="tile is-child">
-      <ul class="is-family-monospace">
+      <ul v-if="!isValidSoc()">
+        <li class="notification is-danger is-light">
+          Please select or enter a valid start of care date
+        </li>
+      </ul>
+      <ul v-if="isValidSoc()" class="is-family-monospace">
         <li
           v-for="(certPeriod, index) in getNCertPeriods(
             socDate,
@@ -216,7 +223,12 @@ export default {
     },
     makeTodayAsSocDate() {
       this.socDate = DateTime.local().startOf("day").toISODate();
+    },
+    resetSelectByToday() {
       this.todayIsDay = "";
+    },
+    isValidSoc() {
+      return this.socDate ? DateTime.fromISO(this.socDate).isValid : false;
     },
   },
 };
