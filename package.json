@@ -2,7 +2,7 @@
   "name": "cms-certification-period",
   "version": "1.0.0",
   "description": "A certification period calculator for Home Health Care",
-  "main": "index.js",
+  "main": "src/main.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build"

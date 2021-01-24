@@ -2,21 +2,33 @@
   <div class="notification is-info is-light">{{ message }}</div>
   <div class="tile is-parent is-vertical">
     <div class="tile is-child">
-      <div id="certPeriodInputsForm">
+      <div id="startOfCareDateSelection">
         <div class="field is-horizontal">
           <div class="field-label is-normal">
             <label class="label">Start of Care Date</label>
           </div>
           <div class="field-body">
-            <p class="control">
-              <input
-                id="socDate"
-                v-model="socDate"
-                class="input"
-                type="date"
-                placeholder="mm/dd/yyyy"
-              />
-            </p>
+            <div class="field is-narrow">
+              <div class="control">
+                <input
+                  id="socDate"
+                  v-model="socDate"
+                  class="input"
+                  type="date"
+                  placeholder="mm/dd/yyyy"
+                />
+              </div>
+            </div>
+            <div class="field is-narrow">
+              <div class="control">
+                <a
+                  class="button is-text"
+                  @click="makeTodayAsSocDate"
+                  title="Set start of care to today"
+                  >Today {{ today }}
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -27,7 +39,7 @@
           </div>
         </div>
 
-        <div class="field is-horizontal">
+        <div id="todayInFirst55Days" class="field is-horizontal">
           <div class="field-label">
             <label class="label">Today is in the</label>
           </div>
@@ -66,7 +78,7 @@
           </div>
         </div>
 
-        <div class="field is-horizontal">
+        <div id="todayInLast5Days" class="field is-horizontal">
           <div class="field-label"></div>
           <div class="field-body">
             <div class="field is-narrow">
@@ -108,23 +120,53 @@
     </div>
 
     <div class="tile is-child">
-      <ul class="is-family-monospace has-text-weight-bold block">
-        <li v-for="n in defaultCertPeriodDisplayCount" :key="n">
-          Certification Period #{{ ("00" + n).slice(-2) }}
-          <span class="has-background-link-light">{{ getFormattedCertPeriod(getNextCertPeriod(socDate, n)) }}</span>
+      <ul class="is-family-monospace">
+        <li
+          v-for="(certPeriod, index) in getNCertPeriods(
+            socDate,
+            defaultCertPeriodDisplayCount
+          )"
+          :key="index"
+          class=""
+        >
+          <div class="level">
+            <div class="level-left">
+              <div class="level-item">
+                Certification Period #{{ ("00" + (index + 1)).slice(-2) }}
+              </div>
+              <div
+                class="level-item has-text-weight-bold has-text-weight-semibold is-size-5"
+              >
+                {{ certPeriod.start.toFormat("MM/dd/yyyy") }}
+              </div>
+              <div class="level-item">to</div>
+              <div
+                class="level-item has-text-weight-bold has-text-weight-semibold is-size-5"
+              >
+                {{ certPeriod.end.toFormat("MM/dd/yyyy") }}
+              </div>
+              <div
+                class="level-item tag is-info is-light is-rounded ml-3 is-size-6"
+                v-if="certPeriod.isCurrent"
+              >
+                Current
+              </div>
+            </div>
+          </div>
         </li>
         <li>
           <a
             @click="
               defaultCertPeriodDisplayCount = defaultCertPeriodDisplayCount + 3
             "
-            >more</a
-          >
+            >more
+          </a>
         </li>
       </ul>
     </div>
   </div>
 </template>
+
 <script>
 import { DateTime } from "luxon";
 import { range } from "lodash-es";
@@ -134,7 +176,8 @@ export default {
     return {
       message:
         "Select or enter a patient's start of care date to display the patient's home health certification period.",
-      socDate: DateTime.local().toISODate(),
+      today: DateTime.local().startOf("day").toFormat("MM/dd/yyyy"),
+      socDate: DateTime.local().startOf("day").toISODate(),
       defaultCertPeriodDisplayCount: 10,
       dayInFirst55Days: 2,
       dayInLast5Days: 56,
@@ -142,32 +185,38 @@ export default {
     };
   },
   methods: {
+    getNCertPeriods(socDate, n) {
+      const result = [];
+      for (let i = 1; i <= n; i++) {
+        result.push(this.getNextCertPeriod(socDate, i));
+      }
+      return result;
+    },
     getNextCertPeriod(socDate, index) {
-      const certStart = DateTime.fromISO(socDate).plus({
+      const start = DateTime.fromISO(socDate).plus({
         days: (index - 1) * 60,
       });
-      const certEnd = certStart.plus({ days: 59 });
+      const end = start.plus({ days: 59 });
       return {
-        start: certStart,
-        end: certEnd,
-        isCurrent: this.isCurrentCertPeriod(certStart, certEnd),
+        start,
+        end,
+        isCurrent: this.isCurrentCertPeriod(start, end),
       };
     },
     isCurrentCertPeriod(start, end) {
       const today = DateTime.local().startOf("day");
       return today <= end && today >= start;
     },
-    getFormattedCertPeriod(certPeriod) {
-      const { start, end, isCurrent } = certPeriod;
-      return `${start.toFormat("MM/dd/yyyy")} to ${end.toFormat(
-        "MM/dd/yyyy"
-      )} ${isCurrent ? "< Current" : ""}`;
-    },
     range,
     calculateSocDate() {
       this.socDate = DateTime.local()
+        .startOf("day")
         .minus({ days: this.$data[this.todayIsDay] - 1 })
         .toISODate();
+    },
+    makeTodayAsSocDate() {
+      this.socDate = DateTime.local().startOf("day").toISODate();
+      this.todayIsDay = "";
     },
   },
 };
