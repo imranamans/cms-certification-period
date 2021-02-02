@@ -1,15 +1,62 @@
 <template>
-  <div class="notification is-info is-light">{{ message }}</div>
-  <div class="tile is-parent is-vertical">
-    <div class="tile is-child">
-      <start-of-care-date-selection @updated="onSocUpdated"/>
+  <article class="message is-info">
+    <div class="message-body">
+      {{ message }}
     </div>
+  </article>
+  <div class="tile is-ancestor is-vertical">
+    <div class="tile is-parent">
+      <div class="tile is-child is-8">
+        <div class="tabs">
+          <ul>
+            <li :class="{ 'is-active': tab === 'A' }">
+              <a @click="tab = 'A'">A</a>
+            </li>
+            <li :class="{ 'is-active': tab === 'B' }">
+              <a @click="tab = 'B'">B</a>
+            </li>
+          </ul>
+        </div>
+        <div class="block" v-if="tab === 'A'">
+          <StartOfCareDateSelection
+            :dateFormat="dateFormat"
+            @updated="onSocUpdated"
+          />
+        </div>
+        <div class="block" v-if="tab === 'B'">
+          <!--  -->
+        </div>
+      </div>
 
-    <div class="tile is-child">
-      <certification-period-display
-        :defaultCertPeriodDisplayCount="defaultCertPeriodDisplayCount"
-        :socDate="socDate"
-      />
+      <div class="tile is-child is-4">
+        <div class="buttons has-addons">
+          <button
+            type="button"
+            class="button"
+            @click="dateFormat = 'MM/dd/yyyy'"
+            :class="{ 'is-selected is-info': dateFormat === 'MM/dd/yyyy' }"
+          >
+            mm/dd/yyyy
+          </button>
+          <button
+            type="button"
+            class="button"
+            @click="dateFormat = 'yyyy-MM-dd'"
+            :class="{ 'is-selected is-info': dateFormat === 'yyyy-MM-dd' }"
+          >
+            yyyy-mm-dd
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="tile is-parent">
+      <div class="tile is-child is-12">
+        <CertificationPeriodDisplay
+          :defaultCertPeriodDisplayCount="defaultCertPeriodDisplayCount"
+          :socDate="socDate"
+          :dateFormat="dateFormat"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -25,15 +72,16 @@ export default {
     return {
       message:
         "Select or enter a patient's start of care date to display the patient's home health certification period.",
-      today: DateTime.local().startOf("day").toFormat("MM/dd/yyyy"),
+      dateFormat: "MM/dd/yyyy",
       socDate: DateTime.local().startOf("day").toISODate(),
       defaultCertPeriodDisplayCount: 10,
+      tab: "A",
     };
   },
   methods: {
     onSocUpdated(newSoCDate) {
       this.socDate = newSoCDate;
-    }
+    },
   },
 };
 </script>

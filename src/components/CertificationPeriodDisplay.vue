@@ -20,13 +20,13 @@
           <div
             class="level-item has-text-weight-bold has-text-weight-semibold is-size-5"
           >
-            {{ certPeriod.start.toFormat("MM/dd/yyyy") }}
+            {{ certPeriod.start.toFormat(this.dateFormat) }}
           </div>
           <div class="level-item">to</div>
           <div
             class="level-item has-text-weight-bold has-text-weight-semibold is-size-5"
           >
-            {{ certPeriod.end.toFormat("MM/dd/yyyy") }}
+            {{ certPeriod.end.toFormat(this.dateFormat) }}
           </div>
           <div
             class="level-item tag is-info is-light is-rounded ml-3 is-size-6"
@@ -60,6 +60,10 @@ export default {
     defaultCertPeriodDisplayCount: {
       type: Number,
       default: 10,
+    },
+    dateFormat: {
+      type: String,
+      default: "MM/dd/yyyy",
     },
   },
   methods: {

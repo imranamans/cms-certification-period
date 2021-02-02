@@ -1,5 +1,5 @@
 <template>
-  <section class="hero is-light">
+  <section class="hero is-small is-light">
     <div class="hero-body">
       <div class="container is-max-desktop">
         <h1 class="title">CMS Certification Period Calculator</h1>

@@ -11,8 +11,11 @@
             v-model="socDate"
             class="input"
             type="date"
-            placeholder="mm/dd/yyyy"
-            @change="resetSelectByToday();$emit('updated', this.socDate)"
+            :placeholder="this.dateFormat"
+            @change="
+              resetSelectByToday();
+              $emit('updated', this.socDate);
+            "
           />
         </div>
       </div>
@@ -140,9 +143,14 @@ import { DateTime } from "luxon";
 import { range } from "lodash-es";
 
 export default {
+  props: {
+    dateFormat: {
+      type: String,
+      default: "MM/dd/yyyy",
+    },
+  },
   data() {
     return {
-      today: DateTime.local().startOf("day").toFormat("MM/dd/yyyy"),
       socDate: DateTime.local().startOf("day").toISODate(),
       dayInFirst55Days: 2,
       dayInLast5Days: 56,
@@ -157,7 +165,12 @@ export default {
       },
     };
   },
-  emits: ['updated'],
+  computed: {
+    today() {
+      return DateTime.local().startOf("day").toFormat(this.dateFormat);
+    }
+  },
+  emits: ["updated"],
   methods: {
     range,
     calculateSocDate() {
