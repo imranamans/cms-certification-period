@@ -5,18 +5,20 @@
     </div>
   </article>
   <div class="tile is-ancestor is-vertical">
+    <div class="tile is-parent is-8">
+      <div class="tabs is-centered">
+        <ul>
+          <li :class="{ 'is-active': tab === 'A' }">
+            <a @click="tab = 'A'">A</a>
+          </li>
+          <li :class="{ 'is-active': tab === 'B' }">
+            <a @click="tab = 'B'">B</a>
+          </li>
+        </ul>
+      </div>
+    </div>
     <div class="tile is-parent">
       <div class="tile is-child is-8">
-        <div class="tabs">
-          <ul>
-            <li :class="{ 'is-active': tab === 'A' }">
-              <a @click="tab = 'A'">A</a>
-            </li>
-            <li :class="{ 'is-active': tab === 'B' }">
-              <a @click="tab = 'B'">B</a>
-            </li>
-          </ul>
-        </div>
         <div class="block" v-if="tab === 'A'">
           <StartOfCareDateSelection
             :dateFormat="dateFormat"
@@ -24,7 +26,7 @@
           />
         </div>
         <div class="block" v-if="tab === 'B'">
-          <!--  -->
+          <StartOfCareDateSelectionB :dateFormat="dateFormat" />
         </div>
       </div>
 
@@ -65,9 +67,14 @@
 import { DateTime } from "luxon";
 import CertificationPeriodDisplay from "./CertificationPeriodDisplay.vue";
 import StartOfCareDateSelection from "./StartOfCareDateSelection.vue";
+import StartOfCareDateSelectionB from "./StartOfCareDateSelectionB.vue";
 
 export default {
-  components: { CertificationPeriodDisplay, StartOfCareDateSelection },
+  components: {
+    CertificationPeriodDisplay,
+    StartOfCareDateSelection,
+    StartOfCareDateSelectionB,
+  },
   data() {
     return {
       message:
@@ -75,7 +82,7 @@ export default {
       dateFormat: "MM/dd/yyyy",
       socDate: DateTime.local().startOf("day").toISODate(),
       defaultCertPeriodDisplayCount: 10,
-      tab: "A",
+      tab: "B",
     };
   },
   methods: {
