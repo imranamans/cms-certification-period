@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import { createStore } from 'vuex';
-import App from './modules/CmsCertPeriod/App.vue';
+import App from './App.vue';
 import './index.css';
 import storeConfig from './Store.js';
 
