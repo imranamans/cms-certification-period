@@ -50,22 +50,23 @@
 
 <script>
 import { DateTime } from "luxon";
+import { mapState } from "vuex";
 
 export default {
   props: {
-    socDate: {
-      type: String,
-      default: DateTime.local().startOf("day").toISODate(),
-    },
     defaultCertPeriodDisplayCount: {
       type: Number,
       default: 10,
     },
-    dateFormat: {
-      type: String,
-      default: "MM/dd/yyyy",
-    },
   },
+
+  computed: {
+    ...mapState({
+      dateFormat: (state) => state.userDateFormat,
+      socDate: "socDate",
+    }),
+  },
+
   methods: {
     getNCertPeriods(socDate, n) {
       const result = [];

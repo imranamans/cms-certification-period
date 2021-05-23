@@ -1,48 +1,98 @@
 <template>
   <div class="field is-horizontal">
     <div class="field-label is-normal">
-      <label for="" class="label">Date</label>
+      <label for="" class="label">The date</label>
     </div>
     <div class="field-body">
       <div class="field is-narrow">
         <div class="control">
           <input
             v-model="theDate"
-            type="text"
+            type="date"
             class="input"
-            :placeholder="this.dateFormat"
+            @change="calculateSocDate()"
           />
         </div>
       </div>
     </div>
   </div>
-  <div class="field">
-    <label for="" class="label">is day</label>
-    <div class="control">
-      <InputText v-model.number="isDay" />
-      <Slider v-model="isDay" :min="1" :max="60" />
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label for="" class="label">is day</label>
+    </div>
+    <div class="field-body">
+      <div class="field is-narrow">
+        <div class="control">
+          <input
+            v-model="dayOrdinal"
+            type="number"
+            class="input"
+            min="1"
+            max="60"
+            placeholder="nth day, 1 to 60"
+            @change="calculateSocDate()"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label for="" class="label">of Cert Period</label>
+    </div>
+    <div class="field-body">
+      <div class="field is-narrow">
+        <div class="control">
+          <input
+            v-model="certificationPeriodOrdinal"
+            type="number"
+            min="1"
+            max="100"
+            class="input"
+            placeholder="nth Cert Period"
+            @change="calculateSocDate()"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import InputText from "primevue/inputtext";
+import { DateTime } from "luxon";
+import { mapActions, mapState } from "vuex";
 
 export default {
-  components: {
-      InputText
-  },
-  props: {
-    dateFormat: {
-      type: String,
-      default: "MM/dd/yyyy",
-    },
-  },
+  components: {},
+
   data() {
     return {
-      isDay: 2,
-      theDate: "",
+      theDate: DateTime.local().startOf("day").toISODate(),
+      dayOrdinal: 1,
+      certificationPeriodOrdinal: 1,
     };
+  },
+
+  computed: {
+    ...mapState({
+      socDate: "socDate",
+    }),
+  },
+
+  methods: {
+    ...mapActions(["updateSocDate"]),
+
+    calculateSocDate() {
+      const calcDate = DateTime.fromISO(this.theDate)
+        .startOf("day")
+        .minus({
+          days:
+            60 * this.certificationPeriodOrdinal - (60 - (this.dayOrdinal - 1)),
+        })
+        .toISODate();
+
+      this.updateSocDate(calcDate);
+    },
   },
 };
 </script>

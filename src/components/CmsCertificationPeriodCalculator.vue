@@ -1,18 +1,19 @@
 <template>
-  <article class="message is-info">
+  <!-- <article class="message is-info">
     <div class="message-body">
-      {{ message }}
+      Select or enter a patient's start of care date to display the patient's home health certification period.
     </div>
-  </article>
+  </article> -->
+
   <div class="tile is-ancestor is-vertical">
     <div class="tile is-parent is-8">
       <div class="tabs is-centered">
         <ul>
           <li :class="{ 'is-active': tab === 'A' }">
-            <a @click="tab = 'A'">A</a>
+            <a @click="tab = 'A'">I know the start of care date</a>
           </li>
           <li :class="{ 'is-active': tab === 'B' }">
-            <a @click="tab = 'B'">B</a>
+            <a @click="tab = 'B'">Calculate using any date</a>
           </li>
         </ul>
       </div>
@@ -20,13 +21,10 @@
     <div class="tile is-parent">
       <div class="tile is-child is-8">
         <div class="block" v-if="tab === 'A'">
-          <StartOfCareDateSelection
-            :dateFormat="dateFormat"
-            @updated="onSocUpdated"
-          />
+          <StartOfCareDateSelection />
         </div>
         <div class="block" v-if="tab === 'B'">
-          <StartOfCareDateSelectionB :dateFormat="dateFormat" />
+          <StartOfCareDateSelectionB />
         </div>
       </div>
 
@@ -35,7 +33,7 @@
           <button
             type="button"
             class="button"
-            @click="dateFormat = 'MM/dd/yyyy'"
+            @click="updateUserDateFormat('MM/dd/yyyy')"
             :class="{ 'is-selected is-info': dateFormat === 'MM/dd/yyyy' }"
           >
             mm/dd/yyyy
@@ -43,7 +41,7 @@
           <button
             type="button"
             class="button"
-            @click="dateFormat = 'yyyy-MM-dd'"
+            @click="updateUserDateFormat('yyyy-MM-dd')"
             :class="{ 'is-selected is-info': dateFormat === 'yyyy-MM-dd' }"
           >
             yyyy-mm-dd
@@ -55,8 +53,6 @@
       <div class="tile is-child is-12">
         <CertificationPeriodDisplay
           :defaultCertPeriodDisplayCount="defaultCertPeriodDisplayCount"
-          :socDate="socDate"
-          :dateFormat="dateFormat"
         />
       </div>
     </div>
@@ -64,10 +60,10 @@
 </template>
 
 <script>
-import { DateTime } from "luxon";
 import CertificationPeriodDisplay from "./CertificationPeriodDisplay.vue";
 import StartOfCareDateSelection from "./StartOfCareDateSelection.vue";
 import StartOfCareDateSelectionB from "./StartOfCareDateSelectionB.vue";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: {
@@ -75,20 +71,25 @@ export default {
     StartOfCareDateSelection,
     StartOfCareDateSelectionB,
   },
+
   data() {
     return {
       message:
         "Select or enter a patient's start of care date to display the patient's home health certification period.",
-      dateFormat: "MM/dd/yyyy",
-      socDate: DateTime.local().startOf("day").toISODate(),
       defaultCertPeriodDisplayCount: 10,
       tab: "B",
     };
   },
+
+  computed: {
+    ...mapState({
+      dateFormat: (state) => state.userDateFormat,
+      socDate: 'socDate'
+    }),
+  },
+
   methods: {
-    onSocUpdated(newSoCDate) {
-      this.socDate = newSoCDate;
-    },
+    ...mapActions(["updateUserDateFormat"]),
   },
 };
 </script>

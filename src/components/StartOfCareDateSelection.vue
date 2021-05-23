@@ -1,4 +1,5 @@
 <template>
+
   <div class="field is-horizontal">
     <div class="field-label">
       <label class="label">Start of Care Date</label>
@@ -8,14 +9,10 @@
         <div class="control">
           <input
             id="socDate"
-            v-model="socDate"
+            :value="socDate"
             class="input"
             type="date"
-            :placeholder="this.dateFormat"
-            @change="
-              resetSelectByToday();
-              $emit('updated', this.socDate);
-            "
+            @input="updateSocDate"
           />
         </div>
       </div>
@@ -141,17 +138,11 @@
 <script>
 import { DateTime } from "luxon";
 import { range } from "lodash-es";
+import { mapActions, mapState } from "vuex";
 
 export default {
-  props: {
-    dateFormat: {
-      type: String,
-      default: "MM/dd/yyyy",
-    },
-  },
   data() {
     return {
-      socDate: DateTime.local().startOf("day").toISODate(),
       dayInFirst55Days: 2,
       dayInLast5Days: 56,
       todayIsDay: "",
@@ -165,31 +156,41 @@ export default {
       },
     };
   },
+
   computed: {
+    ...mapState({
+      dateFormat: (state) => state.userDateFormat,
+      socDate: "socDate",
+    }),
     today() {
       return DateTime.local().startOf("day").toFormat(this.dateFormat);
-    }
+    },
   },
-  emits: ["updated"],
+
   methods: {
     range,
+    ...mapActions(["updateSocDate"]),
+
     calculateSocDate() {
-      this.socDate = DateTime.local()
+      calcDate = DateTime.local()
         .startOf("day")
         .minus({ days: this.$data[this.todayIsDay] - 1 })
         .minus({ days: 60 * (this.certificationPeriodOrdinal - 1) })
         .toISODate();
 
-      this.$emit("updated", this.socDate);
+      this.updateSocDate(calcDate);
     },
-    makeTodayAsSocDate() {
-      this.socDate = DateTime.local().startOf("day").toISODate();
 
-      this.$emit("updated", this.socDate);
+    makeTodayAsSocDate() {
+      const today = DateTime.local().startOf("day").toISODate();
+
+      this.updateSocDate(today);
     },
+
     resetSelectByToday() {
       this.todayIsDay = "";
     },
+
     ordinal(number) {
       return (
         number + this.ordinalSuffixes[this.englishOrdinalRules.select(number)]
