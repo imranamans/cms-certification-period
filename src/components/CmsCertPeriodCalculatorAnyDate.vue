@@ -63,8 +63,6 @@ import { DateTime } from "luxon";
 import { mapActions, mapState } from "vuex";
 
 export default {
-  components: {},
-
   data() {
     return {
       theDate: DateTime.local().startOf("day").toISODate(),

@@ -10,7 +10,7 @@
 
   <section class="section">
     <div class="container is-max-desktop">
-      <CmsCertificationPeriodCalculator />
+      <CmsCertPeriodCalculator />
     </div>
   </section>
 
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import CmsCertificationPeriodCalculator from "./components/CmsCertificationPeriodCalculator.vue";
+import CmsCertPeriodCalculator from "./components/CmsCertPeriodCalculator.vue";
 import "bulma/css/bulma.css";
 </script>
 

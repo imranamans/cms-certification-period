@@ -1,47 +1,7 @@
 <template>
-
-  <div class="field is-horizontal">
-    <div class="field-label">
-      <label class="label">Start of Care Date</label>
-    </div>
-    <div class="field-body">
-      <div class="field is-narrow">
-        <div class="control">
-          <input
-            id="socDate"
-            :value="socDate"
-            class="input"
-            type="date"
-            @input="updateSocDate"
-          />
-        </div>
-      </div>
-      <div class="field is-narrow">
-        <div class="control">
-          <a
-            class="button is-text"
-            @click="
-              makeTodayAsSocDate();
-              resetSelectByToday();
-            "
-            title="Set start of care to today"
-            >Today {{ today }}
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="field is-horizontal">
-    <div class="field-label"></div>
-    <div class="field-body">
-      <p><strong>Or</strong></p>
-    </div>
-  </div>
-
   <div id="todayInFirst55Days" class="field is-horizontal">
     <div class="field-label">
-      <label class="label">Today is in the</label>
+      <label class="label">Today ({{today}}) is in the</label>
     </div>
     <div class="field-body">
       <div class="field is-horizontal is-grouped">
@@ -162,6 +122,7 @@ export default {
       dateFormat: (state) => state.userDateFormat,
       socDate: "socDate",
     }),
+
     today() {
       return DateTime.local().startOf("day").toFormat(this.dateFormat);
     },
@@ -172,23 +133,13 @@ export default {
     ...mapActions(["updateSocDate"]),
 
     calculateSocDate() {
-      calcDate = DateTime.local()
+      const calcDate = DateTime.local()
         .startOf("day")
         .minus({ days: this.$data[this.todayIsDay] - 1 })
         .minus({ days: 60 * (this.certificationPeriodOrdinal - 1) })
         .toISODate();
 
       this.updateSocDate(calcDate);
-    },
-
-    makeTodayAsSocDate() {
-      const today = DateTime.local().startOf("day").toISODate();
-
-      this.updateSocDate(today);
-    },
-
-    resetSelectByToday() {
-      this.todayIsDay = "";
     },
 
     ordinal(number) {

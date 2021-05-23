@@ -10,10 +10,13 @@
       <div class="tabs is-centered">
         <ul>
           <li :class="{ 'is-active': tab === 'A' }">
-            <a @click="tab = 'A'">I know the start of care date</a>
+            <a @click="tab = 'A'">Using start of care date</a>
           </li>
           <li :class="{ 'is-active': tab === 'B' }">
-            <a @click="tab = 'B'">Calculate using any date</a>
+            <a @click="tab = 'B'">Using any date</a>
+          </li>
+          <li :class="{ 'is-active': tab === 'C' }">
+            <a @click="tab = 'C'">Using today' date</a>
           </li>
         </ul>
       </div>
@@ -21,10 +24,13 @@
     <div class="tile is-parent">
       <div class="tile is-child is-8">
         <div class="block" v-if="tab === 'A'">
-          <StartOfCareDateSelection />
+          <CmsCertPeriodCalculatorStartOfCareDate />
         </div>
         <div class="block" v-if="tab === 'B'">
-          <StartOfCareDateSelectionB />
+          <CmsCertPeriodCalculatorAnyDate />
+        </div>
+        <div class="block" v-if="tab === 'C'">
+          <CmsCertPeriodCalculatorCurrentDate />
         </div>
       </div>
 
@@ -51,7 +57,7 @@
     </div>
     <div class="tile is-parent">
       <div class="tile is-child is-12">
-        <CertificationPeriodDisplay
+        <CmsCertPeriodViewer
           :defaultCertPeriodDisplayCount="defaultCertPeriodDisplayCount"
         />
       </div>
@@ -60,22 +66,22 @@
 </template>
 
 <script>
-import CertificationPeriodDisplay from "./CertificationPeriodDisplay.vue";
-import StartOfCareDateSelection from "./StartOfCareDateSelection.vue";
-import StartOfCareDateSelectionB from "./StartOfCareDateSelectionB.vue";
+import CmsCertPeriodViewer from "./CmsCertPeriodViewer.vue";
+import CmsCertPeriodCalculatorStartOfCareDate from "./CmsCertPeriodCalculatorStartOfCareDate.vue";
+import CmsCertPeriodCalculatorAnyDate from "./CmsCertPeriodCalculatorAnyDate.vue";
 import { mapActions, mapState } from "vuex";
+import CmsCertPeriodCalculatorCurrentDate from './CmsCertPeriodCalculatorCurrentDate.vue';
 
 export default {
   components: {
-    CertificationPeriodDisplay,
-    StartOfCareDateSelection,
-    StartOfCareDateSelectionB,
+    CmsCertPeriodViewer,
+    CmsCertPeriodCalculatorStartOfCareDate,
+    CmsCertPeriodCalculatorAnyDate,
+    CmsCertPeriodCalculatorCurrentDate,
   },
 
   data() {
     return {
-      message:
-        "Select or enter a patient's start of care date to display the patient's home health certification period.",
       defaultCertPeriodDisplayCount: 10,
       tab: "B",
     };
@@ -84,7 +90,7 @@ export default {
   computed: {
     ...mapState({
       dateFormat: (state) => state.userDateFormat,
-      socDate: 'socDate'
+      socDate: "socDate",
     }),
   },
 

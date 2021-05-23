@@ -75,6 +75,7 @@ export default {
       }
       return result;
     },
+
     getNextCertPeriod(socDate, index) {
       const start = DateTime.fromISO(socDate).plus({
         days: (index - 1) * 60,
@@ -86,10 +87,12 @@ export default {
         isCurrent: this.isCurrentCertPeriod(start, end),
       };
     },
+
     isCurrentCertPeriod(start, end) {
       const today = DateTime.local().startOf("day");
       return today <= end && today >= start;
     },
+
     isValidSoc() {
       return this.socDate ? DateTime.fromISO(this.socDate).isValid : false;
     },
