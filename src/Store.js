@@ -26,7 +26,6 @@ export default {
             commit('setSocDate', socDate);
         },
         async updateUserDateFormat({ commit }, userDateFormat) {
-            console.log(6, userDateFormat);
             commit('setUserDateFormat', userDateFormat);
         }
     }

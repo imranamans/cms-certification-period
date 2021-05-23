@@ -23,15 +23,11 @@
     </div>
     <div class="tile is-parent">
       <div class="tile is-child is-8">
-        <div class="block" v-if="tab === 'A'">
-          <CmsCertPeriodCalculatorStartOfCareDate />
-        </div>
-        <div class="block" v-if="tab === 'B'">
-          <CmsCertPeriodCalculatorAnyDate />
-        </div>
-        <div class="block" v-if="tab === 'C'">
-          <CmsCertPeriodCalculatorCurrentDate />
-        </div>
+        <keep-alive>
+          <cms-cert-period-calculator-start-of-care-date v-if="tab === 'A'"/>
+          <cms-cert-period-calculator-any-date v-else-if="tab === 'B'"/>
+          <cms-cert-period-calculator-current-date v-else-if="tab === 'C'"/>
+        </keep-alive>
       </div>
 
       <div class="tile is-child is-4">
@@ -66,10 +62,10 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
 import CmsCertPeriodViewer from "./CmsCertPeriodViewer.vue";
 import CmsCertPeriodCalculatorStartOfCareDate from "./CmsCertPeriodCalculatorStartOfCareDate.vue";
 import CmsCertPeriodCalculatorAnyDate from "./CmsCertPeriodCalculatorAnyDate.vue";
-import { mapActions, mapState } from "vuex";
 import CmsCertPeriodCalculatorCurrentDate from './CmsCertPeriodCalculatorCurrentDate.vue';
 
 export default {

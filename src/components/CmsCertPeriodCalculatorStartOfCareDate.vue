@@ -8,7 +8,7 @@
         <div class="control">
           <input
             id="socDate"
-            :value="socDate"
+            v-model="theDate"
             class="input"
             type="date"
             @input="update"
@@ -38,6 +38,12 @@ import { mapActions, mapState } from "vuex";
 
 export default {
 
+  data() {
+    return {
+      theDate: DateTime.local().startOf("day").toISODate()
+    };
+  },
+
   computed: {
     ...mapState({
       dateFormat: (state) => state.userDateFormat,
@@ -49,18 +55,22 @@ export default {
     },
   },
 
+  activated() {
+    this.update();
+  },
+
   methods: {
     range,
     ...mapActions(["updateSocDate"]),
 
     makeTodayAsSocDate() {
       const today = DateTime.local().startOf("day").toISODate();
-
-      this.updateSocDate(today);
+      this.theDate = today;
+      this.update();
     },
 
-    update(e) {
-      this.updateSocDate(e.target.value);
+    update() {
+      this.updateSocDate(this.theDate);
     },
   },
 };

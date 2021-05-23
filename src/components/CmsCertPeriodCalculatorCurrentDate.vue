@@ -1,7 +1,7 @@
 <template>
   <div id="todayInFirst55Days" class="field is-horizontal">
     <div class="field-label">
-      <label class="label">Today ({{today}}) is in the</label>
+      <label class="label">Today ({{ today }}) is in the</label>
     </div>
     <div class="field-body">
       <div class="field is-horizontal is-grouped">
@@ -128,8 +128,17 @@ export default {
     },
   },
 
+  activated() {
+    try {
+      this.calculateSocDate();
+    } catch (e) {
+      console.log('Ignored', e);
+    }
+  },
+
   methods: {
     range,
+
     ...mapActions(["updateSocDate"]),
 
     calculateSocDate() {
@@ -151,5 +160,5 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 </style>

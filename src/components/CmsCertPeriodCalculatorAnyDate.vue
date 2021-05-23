@@ -77,6 +77,10 @@ export default {
     }),
   },
 
+  activated() {
+    this.calculateSocDate();
+  },
+
   methods: {
     ...mapActions(["updateSocDate"]),
 
