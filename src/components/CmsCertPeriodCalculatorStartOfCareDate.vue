@@ -1,6 +1,6 @@
 <template>
   <div class="field is-horizontal">
-    <div class="field-label">
+    <div class="field-label is-normal">
       <label for="socDate" class="label">Start of Care Date</label>
     </div>
     <div class="field-body">
