@@ -71,13 +71,14 @@
 
   <div class="field is-horizontal" v-show="todayIsDay">
     <div class="field-label">
-      <label class="label">of the</label>
+      <label for="currentDateCertPeriodOrdinal" class="label">of the</label>
     </div>
     <div class="field-body">
       <div class="field is-narrow">
         <div class="control">
           <div class="select">
             <select
+              id="currentDateCertPeriodOrdinal"
               v-model.number="certificationPeriodOrdinal"
               @change="calculateSocDate()"
             >
@@ -96,16 +97,16 @@
 </template>
 
 <script>
-import { DateTime } from "luxon";
-import { range } from "lodash-es";
+import { DateTime } from "luxon/src/luxon";
 import { mapActions, mapState } from "vuex";
+import range from "lodash-es/range";
 
 export default {
   data() {
     return {
       dayInFirst55Days: 2,
       dayInLast5Days: 56,
-      todayIsDay: "",
+      todayIsDay: "dayInFirst55Days",
       certificationPeriodOrdinal: 1,
       englishOrdinalRules: new Intl.PluralRules("en", { type: "ordinal" }),
       ordinalSuffixes: {
@@ -129,11 +130,7 @@ export default {
   },
 
   activated() {
-    try {
-      this.calculateSocDate();
-    } catch (e) {
-      console.log('Ignored', e);
-    }
+    this.calculateSocDate();
   },
 
   methods: {

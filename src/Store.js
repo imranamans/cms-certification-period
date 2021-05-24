@@ -1,5 +1,5 @@
 import isEmpty from 'lodash/isEmpty';
-import { DateTime } from "luxon";
+import { DateTime } from "luxon/src/luxon";
 
 export default {
     state() {

@@ -36,7 +36,7 @@
             type="button"
             class="button"
             @click="updateUserDateFormat('MM/dd/yyyy')"
-            :class="{ 'is-selected is-info': dateFormat === 'MM/dd/yyyy' }"
+            :class="{ 'is-selected is-link': dateFormat === 'MM/dd/yyyy' }"
           >
             mm/dd/yyyy
           </button>
@@ -44,7 +44,7 @@
             type="button"
             class="button"
             @click="updateUserDateFormat('yyyy-MM-dd')"
-            :class="{ 'is-selected is-info': dateFormat === 'yyyy-MM-dd' }"
+            :class="{ 'is-selected is-link': dateFormat === 'yyyy-MM-dd' }"
           >
             yyyy-mm-dd
           </button>

@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { DateTime } from "luxon";
+import { DateTime } from "luxon/src/luxon";
 import { mapState } from "vuex";
 
 export default {

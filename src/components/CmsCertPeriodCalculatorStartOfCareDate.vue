@@ -1,7 +1,7 @@
 <template>
   <div class="field is-horizontal">
     <div class="field-label">
-      <label class="label">Start of Care Date</label>
+      <label for="socDate" class="label">Start of Care Date</label>
     </div>
     <div class="field-body">
       <div class="field is-narrow">
@@ -32,8 +32,7 @@
 </template>
 
 <script>
-import { DateTime } from "luxon";
-import { range } from "lodash-es";
+import { DateTime } from "luxon/src/luxon";
 import { mapActions, mapState } from "vuex";
 
 export default {
@@ -60,7 +59,6 @@ export default {
   },
 
   methods: {
-    range,
     ...mapActions(["updateSocDate"]),
 
     makeTodayAsSocDate() {

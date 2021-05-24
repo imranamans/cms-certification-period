@@ -1,12 +1,13 @@
 <template>
   <div class="field is-horizontal">
     <div class="field-label is-normal">
-      <label for="" class="label">The date</label>
+      <label for="theDate" class="label">The date</label>
     </div>
     <div class="field-body">
       <div class="field is-narrow">
         <div class="control">
           <input
+            id="theDate"
             v-model="theDate"
             type="date"
             class="input"
@@ -18,12 +19,13 @@
   </div>
   <div class="field is-horizontal">
     <div class="field-label is-normal">
-      <label for="" class="label">is day</label>
+      <label for="dayOrdinal" class="label">is day</label>
     </div>
     <div class="field-body">
       <div class="field is-narrow">
         <div class="control">
           <input
+            id="dayOrdinal"
             v-model="dayOrdinal"
             type="number"
             class="input"
@@ -38,12 +40,13 @@
   </div>
   <div class="field is-horizontal">
     <div class="field-label is-normal">
-      <label for="" class="label">of Cert Period</label>
+      <label for="anyDateCertificationPeriodOrdinal" class="label">of Cert Period</label>
     </div>
     <div class="field-body">
       <div class="field is-narrow">
         <div class="control">
           <input
+            id="anyDateCertificationPeriodOrdinal"
             v-model="certificationPeriodOrdinal"
             type="number"
             min="1"
@@ -59,7 +62,7 @@
 </template>
 
 <script>
-import { DateTime } from "luxon";
+import { DateTime } from "luxon/src/luxon";
 import { mapActions, mapState } from "vuex";
 
 export default {
