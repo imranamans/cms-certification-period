@@ -1,9 +1,4 @@
 <template>
-  <!-- <article class="message is-info">
-    <div class="message-body">
-      Select or enter a patient's start of care date to display the patient's home health certification period.
-    </div>
-  </article> -->
 
   <div class="tile is-ancestor is-vertical">
     <div class="tile is-parent is-8">
@@ -16,7 +11,7 @@
             <a @click="tab = 'B'">Using any date</a>
           </li>
           <li :class="{ 'is-active': tab === 'C' }">
-            <a @click="tab = 'C'">Using today' date</a>
+            <a @click="tab = 'C'">Using today</a>
           </li>
         </ul>
       </div>
